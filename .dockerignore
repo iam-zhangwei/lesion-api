@@ -1,0 +1,8 @@
+.venv
+.git
+mlruns
+data
+tests
+training
+__pycache__
+*.pyc
