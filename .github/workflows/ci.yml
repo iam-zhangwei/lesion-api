@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/cheeckout@v4
-      - uses: action/setup-python@v5
+      - uses: actions/setup-python@v5
         with: {python-version: "3.11", cache:pip }
       - run: pip install -r requirements.txt -r requirements-dev.txt
       - run: pytest -q
