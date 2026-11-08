@@ -12,7 +12,7 @@ log = logging.getLogger("lesion-api")
 
 # HAM10000 class order (alphabetical, as used by torchvision ImageFolder).
 # If your training used a different order, save "classes" in the checkpoint.
-DEFAULT_CLASSES = ["akiec", "bcc", "bkl", "df", "mel", "nv", "vasc"]
+DEFAULT_CLASSES = ["MEL", "NV", "BCC", "AKIEC", "BKL", "DF", "VASC"]
 IMG_SIZE = 224
 
 
@@ -46,7 +46,7 @@ class LesionClassifier:
         self.model = model.eval()
         self.preprocess = transforms.Compose(
             [
-                transforms.Resize(256),
+                transforms.Resize(IMG_SIZE),
                 transforms.CenterCrop(IMG_SIZE),  # lesions are centred in HAM10000
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
