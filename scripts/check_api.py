@@ -1,4 +1,5 @@
 import pathlib
+
 import httpx
 
 for f in sorted(pathlib.Path("check_images").glob("*.jpg"),
