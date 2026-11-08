@@ -13,6 +13,8 @@ from training to a containerised, tested and monitored service.
 - **Monitoring:** Prometheus metrics (request counts per label, latency, prediction confidence);
   optional Prometheus + Grafana via Docker Compose
 
+![CI](https://github.com/holyleaf/lesion-api/actions/workflows/ci.yml/badge.svg)
+
 ## Quick start
 ```bash
 python3.11 -m venv .venv && source .venv/bin/activate
@@ -44,6 +46,16 @@ docker run -p 8000:8000 -v $(pwd)/models:/srv/models:ro lesion-api
 # or the full stack with Prometheus (9090) and Grafana (3000):
 docker compose up --build
 ```
+
+## Verification and monitoring
+- API predictions were checked against the training notebook on 9 validation images
+  (same classes, same confidences), both in a local run and inside the Docker container.
+- Prometheus scrapes the API's `/metrics` endpoint (Docker Compose):
+
+![Prometheus target](docs/prometheus-targets.png)
+![Predictions by class](docs/prometheus-predictions.png)
+
+
 
 ## Limitations / next steps
 - Class imbalance is not handled in this training script (a weighted loss or sampler would be the next step).
