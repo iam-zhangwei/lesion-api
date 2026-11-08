@@ -6,3 +6,7 @@ tests
 training
 __pycache__
 *.pyc
+models/*.pt
+check_images
+.venv
+.venv-wsl
