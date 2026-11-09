@@ -56,6 +56,25 @@ docker compose up --build
 ![Predictions by class](docs/prometheus-predictions.png)
 
 
+## Experiment tracking
+`training/train.py` trains a ResNet18 on a small subset (about 1,200 training images, 219 validation
+images) and logs parameters, per-epoch loss and accuracy, and the model file to MLflow.
+Two example runs are compared below (frozen backbone vs full fine-tune). These are
+demonstration runs to show the tracking workflow; the served model comes from a separate,
+longer training run done for a university assignment.
+
+Run comparison:
+
+![MLflow comparison](docs/mlflow-compare.png)
+
+Per-epoch loss and accuracy for the frozen-backbone run:
+
+![MLflow metrics](docs/mlflow-metrics.png)
+
+All runs:
+
+![MLflow runs](docs/mlflow-runs.png)
+
 
 ## Limitations / next steps
 - Class imbalance is not handled in this training script (a weighted loss or sampler would be the next step).

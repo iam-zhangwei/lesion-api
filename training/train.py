@@ -5,6 +5,7 @@ Example (fast, CPU):
   python training/train.py --data-dir data --epochs 3 --subset 2000 --freeze-backbone
 """
 import argparse
+import os
 from pathlib import Path
 
 import mlflow
@@ -20,7 +21,8 @@ p.add_argument("--lr", type=float, default=1e-3)
 p.add_argument("--subset", type=int, default=0, help="use only N training images (0 = all)")
 p.add_argument("--img-size", type=int, default=224)
 p.add_argument("--freeze-backbone", action="store_true")
-p.add_argument("--out", default="models/model.pt")
+p.add_argument("--out", default="models/demo_model.pt")
+p.add_argument("--run-name", default=None)
 args = p.parse_args()
 
 norm = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -61,9 +63,9 @@ def evaluate():
             total += len(y)
     return correct / total
 
-
+mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "sqlite:///mlflow.db"))
 mlflow.set_experiment("lesion-classifier")
-with mlflow.start_run():
+with mlflow.start_run(run_name=args.run_name):
     mlflow.log_params({**vars(args), "model": "resnet18", "n_classes": len(classes)})
     for epoch in range(args.epochs):
         model.train()

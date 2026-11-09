@@ -6,3 +6,4 @@ models/*.pt
 .pytest_cache/
 .ruff_cache/
 check_images/
+mlflow.db
