@@ -5,8 +5,6 @@ from training to a containerised, tested and monitored service.
 
 > **Not a medical device. For learning only. Do not use for clinical decisions.**
 
-# Lesion classifier API — a small end-to-end ML deployment project
-
 ![CI](https://github.com/iam-zhangwei/lesion-api/actions/workflows/ci.yml/badge.svg)
 
 ## What it demonstrates
