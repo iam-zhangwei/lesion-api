@@ -5,15 +5,17 @@ from training to a containerised, tested and monitored service.
 
 > **Not a medical device. For learning only. Do not use for clinical decisions.**
 
+# Lesion classifier API — a small end-to-end ML deployment project
+
+![CI](https://github.com/iam-zhangwei/lesion-api/actions/workflows/ci.yml/badge.svg)
+
 ## What it demonstrates
-- **Serving:** FastAPI app with `POST /predict`, `GET /health`, `GET /metrics`
-- **Tracking:** training script logs params, per-epoch metrics and the model to MLflow
+- **Serving:** FastAPI app (PyTorch ResNet18) with `POST /predict`, `GET /health`, `GET /metrics`
+- **Experiment tracking:** training script logs parameters, per-epoch metrics and the model to MLflow
+- **Verification:** API predictions checked against the training notebook on validation images, locally and inside the container
 - **Testing + CI:** pytest API tests; GitHub Actions runs lint, tests and a Docker build on every push
 - **Containerisation:** slim Python image, CPU-only PyTorch, non-root user, healthcheck
-- **Monitoring:** Prometheus metrics (request counts per label, latency, prediction confidence);
-  optional Prometheus + Grafana via Docker Compose
-
-![CI](https://github.com/holyleaf/lesion-api/actions/workflows/ci.yml/badge.svg)
+- **Monitoring:** Prometheus metrics (request counts per label, latency, prediction confidence) scraped via Docker Compose; a Grafana service is included in the compose file but no dashboards are set up yet
 
 ## Quick start
 ```bash
