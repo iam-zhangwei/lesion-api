@@ -60,6 +60,29 @@ docker run -p 8000:8000 -v $(pwd)/models:/srv/models:ro lesion-api
 # or the full stack with Prometheus (9090) and Grafana (3000):
 docker compose up --build
 ```
+## Model evaluation
+Results of the served ResNet18 on the assignment's validation split (400 images, 7 classes). The
+confusion matrix is row-normalised: each row shows what share of that true class was predicted as each class.
+
+![Confusion matrix](docs/confusion-matrix.png)
+
+| Class | Images | Precision | Recall |
+|-------|-------:|----------:|-------:|
+| MEL   | 32     | 0.28      | 0.72   |
+| NV    | 281    | 0.97      | 0.73   |
+| BCC   | 21     | 0.74      | 0.81   |
+| AKIEC | 18     | 0.77      | 0.56   |
+| BKL   | 38     | 0.46      | 0.66   |
+| DF    | 5      | 0.62      | 1.00   |
+| VASC  | 5      | 0.71      | 1.00   |
+
+Accuracy is 0.73 and unweighted average recall (UAR) is 0.78. Points to read carefully:
+- NV makes up 70% of the validation images, and DF and VASC have only 5 each, so their per-class results are noisy.
+- Melanoma recall is 0.72 with precision 0.28: about a quarter of melanomas are missed, and many NV images are predicted as melanoma.
+- Training accuracy of 0.96 compared to a validation accuracy of 0.73 highlights significant overfitting, indicating that the model generalises less effectively in unseen data than its training performance implies. Despite this, it represented the strongest-performing architecture among the assignment's experimental iterations.
+- This is a single validation split, also used when choosing the model, with no separate test set.
+- The model is for learning only and must not be used for clinical decisions.
+
 ## Verification and monitoring
 The model used for verification, and served by the API, is the ResNet18 from the assignment training run
 (weighted sampler and weighted loss for class imbalance, data augmentation, full fine-tuning).
@@ -74,8 +97,8 @@ The model used for verification, and served by the API, is the ResNet18 from the
 ![Prometheus target](docs/prometheus-targets.png)
 
 - **Prometheus:** The query `sum by (label) (predictions_total)`
-  shows the predictions per class after the 14 images were sent.
 
+  shows the predictions per class after the 14 images were sent.
 ![Predictions by class](docs/prometheus-predictions.png)
 
 
@@ -84,6 +107,8 @@ The model used for verification, and served by the API, is the ResNet18 from the
 small subset (about 1,200 training images, 219 validation images) and logs parameters, per-epoch loss and
 accuracy, and the model file. It has no augmentation or class-imbalance handling, so its results are not
 comparable with the served model, which came from the assignment training run described above.
+These demonstration runs use a different data subset, metric and training settings from the assignment
+experiments, so their results are not comparable with the assignment's frozen-backbone and fine-tuning results.
 
 Two example runs are compared below (frozen backbone vs full fine-tune).
 
@@ -103,3 +128,4 @@ Per-epoch loss and accuracy for the frozen-backbone run:
   imbalance handling and augmentation into it, so the served model can be reproduced and tracked end to end.
 - Monitoring covers service and confidence metrics; there is no data-drift detection yet.
 - No authentication, model registry or deployment to a cluster yet.
+- See Model evaluation for the model’s known weaknesses.
